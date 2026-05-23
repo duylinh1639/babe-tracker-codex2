@@ -1,0 +1,14 @@
+"home.greeting" = "Xin chào";
+"sync.live" = "Đồng bộ";
+"home.quicklog.sleep" = "Ngủ";
+"home.quicklog.diaper" = "Tã";
+"home.quicklog.medicine" = "Thuốc";
+"home.quicklog.symptom" = "Triệu chứng";
+"sleep.timer.active" = "Đang ngủ";
+"sleep.timer.start" = "Bắt đầu ngủ";
+"sleep.timer.stop" = "Kết thúc";
+"growth.percentile" = "phân vị";
+"vaccine.status.done" = "Xong";
+"vaccine.status.soon" = "Sắp đến";
+"vaccine.status.overdue" = "Trễ hẹn";
+"warning.double.dose" = "Cảnh báo liều thuốc";

@@ -1,0 +1,14 @@
+"home.greeting" = "Hello";
+"sync.live" = "Synced";
+"home.quicklog.sleep" = "Sleep";
+"home.quicklog.diaper" = "Diaper";
+"home.quicklog.medicine" = "Medicine";
+"home.quicklog.symptom" = "Symptom";
+"sleep.timer.active" = "Sleeping";
+"sleep.timer.start" = "Start Sleep";
+"sleep.timer.stop" = "End Sleep";
+"growth.percentile" = "percentile";
+"vaccine.status.done" = "Done";
+"vaccine.status.soon" = "Soon";
+"vaccine.status.overdue" = "Overdue";
+"warning.double.dose" = "Double-dose warning";

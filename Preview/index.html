@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BabyHealthTracker UI Preview</title>
+  <style>
+    :root {
+      --primary: #7c5cbf;
+      --sleep: #5b5bd6;
+      --sleep-bg: #f0f4ff;
+      --growth: #2dbd7e;
+      --growth-bg: #f0fff8;
+      --diaper: #c47d00;
+      --diaper-bg: #fff8ec;
+      --vaccine: #c47d00;
+      --vaccine-bg: #fffdf0;
+      --med: #1a8a54;
+      --med-bg: #f0fff6;
+      --alert: #d63b6a;
+      --alert-bg: #fff0f3;
+      --bg: #f9f8ff;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #7b6f8a;
+      --line: rgba(0, 0, 0, 0.06);
+      --shadow: 0 18px 44px rgba(72, 50, 115, 0.14);
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(124, 92, 191, 0.16), transparent 28%),
+        linear-gradient(135deg, #f9f8ff 0%, #eefbf4 100%);
+      color: var(--text);
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: minmax(260px, 360px) minmax(360px, 1fr);
+      gap: 34px;
+      min-height: 100vh;
+      padding: 42px;
+      align-items: center;
+    }
+
+    .notes {
+      max-width: 360px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+
+    .notes p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .legend {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    .stage {
+      display: grid;
+      place-items: center;
+    }
+
+    .phone {
+      width: min(390px, 100%);
+      height: 844px;
+      padding: 12px;
+      border-radius: 46px;
+      background: #17131f;
+      box-shadow: var(--shadow);
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 36px;
+      background: var(--bg);
+    }
+
+    .status {
+      height: 34px;
+      padding: 11px 22px 0;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .content {
+      height: calc(100% - 116px);
+      overflow: hidden;
+      padding: 10px 18px 18px;
+    }
+
+    .view {
+      display: none;
+      height: 100%;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .hello {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .baby-name {
+      margin-top: 3px;
+      font-size: 24px;
+      font-weight: 850;
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(124, 92, 191, 0.14);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(48, 34, 77, 0.06);
+    }
+
+    .baby-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+
+    .baby-avatar {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(124, 92, 191, 0.13);
+      color: var(--primary);
+      font-weight: 850;
+    }
+
+    .baby-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .baby-meta strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .baby-meta small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .sync {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(45, 189, 126, 0.12);
+      color: var(--growth);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .sync::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--growth);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.82); }
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      min-height: 94px;
+      padding: 12px;
+      border-radius: 14px;
+    }
+
+    .icon {
+      width: 19px;
+      height: 19px;
+      margin-bottom: 8px;
+      color: currentColor;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .stat small {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .section-title {
+      margin: 16px 2px 9px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .quick {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+
+    .quick button {
+      min-height: 74px;
+      border: 0;
+      border-radius: 14px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      gap: 7px;
+    }
+
+    .quick svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .row-icon {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      flex: 0 0 auto;
+    }
+
+    .row-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .row-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .row-text strong,
+    .row-text small {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row-text strong {
+      font-size: 14px;
+    }
+
+    .row-text small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .badge {
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .timer-card {
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .timer-card h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+
+    .timer {
+      color: var(--sleep);
+      font-size: 42px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .timer-card p {
+      margin: 12px 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .primary-btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 16px;
+      background: var(--primary);
+      color: white;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .bars {
+      padding: 16px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 36px;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .track {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(91, 91, 214, 0.13);
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--sleep);
+    }
+
+    .chart {
+      height: 220px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(45, 189, 126, 0.08);
+      border-radius: 18px;
+    }
+
+    .chart svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .vaccine-card {
+      padding: 14px;
+      border-radius: 18px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(196, 125, 0, 0.18);
+      background: rgba(196, 125, 0, 0.08);
+    }
+
+    .vaccine-card.alert {
+      border-color: rgba(214, 59, 106, 0.2);
+      background: rgba(214, 59, 106, 0.08);
+    }
+
+    .pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .profile-line {
+      display: grid;
+      grid-template-columns: 44px 1fr 24px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 9px;
+    }
+
+    .tabbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 82px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 9px 10px 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .tabbar button {
+      border: 0;
+      background: transparent;
+      color: #c5bdcf;
+      font: inherit;
+      font-size: 10px;
+      font-weight: 850;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      gap: 4px;
+      position: relative;
+    }
+
+    .tabbar button.active {
+      color: var(--primary);
+    }
+
+    .tabbar button.active::after {
+      content: "";
+      position: absolute;
+      bottom: 1px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .tabbar svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sleep-bg { background: var(--sleep-bg); color: var(--sleep); }
+    .diaper-bg { background: var(--diaper-bg); color: var(--diaper); }
+    .med-bg { background: var(--med-bg); color: var(--med); }
+    .alert-bg { background: var(--alert-bg); color: var(--alert); }
+    .growth-bg { background: var(--growth-bg); color: var(--growth); }
+    .vaccine-bg { background: var(--vaccine-bg); color: var(--vaccine); }
+
+    @media (max-width: 860px) {
+      .page {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+
+      .notes {
+        max-width: none;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="notes">
+      <p class="eyebrow">iOS SwiftUI preview</p>
+      <h1>BabyHealthTracker</h1>
+      <p>Bản xem trước giao diện dựa trên app SwiftUI trong Xcode project. Chọn các tab trong khung iPhone để xem Home, Sleep, Growth, Vaccine và Profile.</p>
+      <div class="legend">
+        <span><i class="dot" style="background: var(--primary)"></i> Clean minimal UI, pastel tokens</span>
+        <span><i class="dot" style="background: var(--growth)"></i> Demo data cho bé Bao Miu</span>
+        <span><i class="dot" style="background: var(--alert)"></i> Prototype local, chưa có backend sync</span>
+      </div>
+    </section>
+
+    <section class="stage">
+      <div class="phone">
+        <div class="screen">
+          <div class="status">
+            <span>9:41</span>
+            <span>5G 100%</span>
+          </div>
+
+          <div class="content">
+            <section class="view active" data-view="home">
+              <div class="topbar">
+                <div>
+                  <div class="hello">Xin chào</div>
+                  <div class="baby-name">Bảo Miu</div>
+                </div>
+                <div class="avatar">MN</div>
+              </div>
+
+              <div class="baby-card card">
+                <div class="baby-avatar">BM</div>
+                <div class="baby-meta">
+                  <strong>Bảo Miu</strong>
+                  <small>18 tháng - 15/11/2024</small>
+                </div>
+                <div class="sync">Đồng bộ</div>
+              </div>
+
+              <div class="stats">
+                <div class="stat sleep-bg"><span data-icon="moon"></span><strong>9.0h</strong><small>Ngủ</small></div>
+                <div class="stat diaper-bg"><span data-icon="drop"></span><strong>3</strong><small>Tã hôm nay</small></div>
+                <div class="stat alert-bg"><span data-icon="temp"></span><strong>36.8</strong><small>Độ C</small></div>
+              </div>
+
+              <div class="section-title">Quick log</div>
+              <div class="quick">
+                <button class="sleep-bg"><span data-icon="moon"></span>Ngủ</button>
+                <button class="diaper-bg"><span data-icon="drop"></span>Tã</button>
+                <button class="med-bg"><span data-icon="pill"></span>Thuốc</button>
+                <button class="alert-bg"><span data-icon="temp"></span>Triệu chứng</button>
+              </div>
+
+              <div class="section-title">Today</div>
+              <div class="row card">
+                <div class="row-icon med-bg"><span data-icon="pill"></span></div>
+                <div class="row-text"><strong>Paracetamol next dose</strong><small>5 ml oral</small></div>
+                <div class="badge med-bg">14:00</div>
+              </div>
+              <div class="row card">
+                <div class="row-icon vaccine-bg"><span data-icon="syringe"></span></div>
+                <div class="row-text"><strong>MMR dose 1</strong><small>Due soon</small></div>
+                <div class="badge vaccine-bg">3d</div>
+              </div>
+
+              <div class="section-title">Activity today</div>
+              <div class="row card">
+                <div class="row-icon diaper-bg"><span data-icon="drop"></span></div>
+                <div class="row-text"><strong>Wet diaper</strong><small>Normal - Dad</small></div>
+                <small>45m</small>
+              </div>
+              <div class="row card">
+                <div class="row-icon sleep-bg"><span data-icon="moon"></span></div>
+                <div class="row-text"><strong>Nap sleep</strong><small>1h 30m - Mom</small></div>
+                <small>3h</small>
+              </div>
+            </section>
+
+            <section class="view" data-view="sleep">
+              <div class="topbar">
+                <div class="baby-name">Sleep</div>
+                <div class="avatar"><span data-icon="moon"></span></div>
+              </div>
+              <div class="timer-card card">
+                <h2>Đang ngủ trưa</h2>
+                <div class="timer">01:24:37</div>
+                <p>Bắt đầu lúc 13:20 - Mẹ ghi</p>
+                <button class="primary-btn" style="background: var(--sleep)">Kết thúc</button>
+              </div>
+              <div class="section-title">Last 7 days</div>
+              <div class="bars card">
+                <div class="bar-row"><span>T2</span><div class="track"><div class="fill" style="width: 72%"></div></div><span>10.2</span></div>
+                <div class="bar-row"><span>T3</span><div class="track"><div class="fill" style="width: 66%"></div></div><span>9.4</span></div>
+                <div class="bar-row"><span>T4</span><div class="track"><div class="fill" style="width: 82%"></div></div><span>11.6</span></div>
+                <div class="bar-row"><span>T5</span><div class="track"><div class="fill" style="width: 78%"></div></div><span>11.0</span></div>
+                <div class="bar-row"><span>T6</span><div class="track"><div class="fill" style="width: 88%"></div></div><span>12.4</span></div>
+                <div class="bar-row"><span>T7</span><div class="track"><div class="fill" style="width: 63%; background: var(--alert)"></div></div><span>8.9</span></div>
+                <div class="bar-row"><span>CN</span><div class="track"><div class="fill" style="width: 75%"></div></div><span>10.6</span></div>
+              </div>
+              <div class="section-title">Sleep log</div>
+              <div class="row card"><div class="row-icon sleep-bg"><span data-icon="moon"></span></div><div class="row-text"><strong>Night</strong><small>20:15 - 05:10</small></div><div class="badge sleep-bg">8h 55m</div></div>
+            </section>
+
+            <section class="view" data-view="growth">
+              <div class="topbar">
+                <div class="baby-name">Growth</div>
+                <div class="avatar"><span data-icon="chart"></span></div>
+              </div>
+              <div class="card" style="padding:16px">
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:14px">
+                  <div><strong style="font-size:18px">WHO chart</strong><small style="display:block;color:var(--growth);font-weight:800;margin-top:4px">65th percentile - 10.2 kg</small></div>
+                  <div class="badge growth-bg">kg</div>
+                </div>
+                <div class="chart">
+                  <svg viewBox="0 0 320 190" fill="none" aria-hidden="true">
+                    <rect x="16" y="48" width="288" height="72" rx="18" fill="#2dbd7e" opacity=".10"/>
+                    <path d="M20 150H300M20 105H300M20 60H300" stroke="#2dbd7e" stroke-opacity=".16"/>
+                    <path d="M24 142C72 124 94 112 132 96C174 78 218 72 296 48" stroke="#b7e9d2" stroke-width="2"/>
+                    <path d="M24 132C76 118 96 104 132 91C174 74 220 66 296 38" stroke="#2dbd7e" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="24" cy="132" r="7" fill="white" stroke="#2dbd7e" stroke-width="4"/>
+                    <circle cx="132" cy="91" r="7" fill="white" stroke="#2dbd7e" stroke-width="4"/>
+                    <circle cx="296" cy="38" r="7" fill="white" stroke="#2dbd7e" stroke-width="4"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="section-title">Measurement log</div>
+              <div class="row card"><div class="row-icon growth-bg"><span data-icon="chart"></span></div><div class="row-text"><strong>22/05/2026</strong><small>Clinic checkup</small></div><small>10.2 kg<br>82 cm</small></div>
+              <div class="row card"><div class="row-icon growth-bg"><span data-icon="chart"></span></div><div class="row-text"><strong>22/03/2026</strong><small>Measurement</small></div><small>9.8 kg<br>79 cm</small></div>
+            </section>
+
+            <section class="view" data-view="vaccine">
+              <div class="topbar">
+                <div class="baby-name">Vaccines</div>
+                <div class="avatar"><span data-icon="syringe"></span></div>
+              </div>
+              <div class="pills">
+                <div class="pill growth-bg">8 Done</div>
+                <div class="pill vaccine-bg">1 Soon</div>
+                <div class="pill alert-bg">1 Late</div>
+              </div>
+              <div class="section-title">Vietnam EPI schedule</div>
+              <div class="vaccine-card">
+                <div class="row-text"><strong>MMR</strong><small>Dose 1 - Due 15/06/2026</small></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><small style="color:var(--vaccine);font-weight:850">3d left</small><div class="badge vaccine-bg">Soon</div></div>
+              </div>
+              <div class="vaccine-card alert">
+                <div class="row-text"><strong>Varicella</strong><small>Dose 1 - Due 08/05/2026</small></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><small style="color:var(--alert);font-weight:850">12d overdue</small><div class="badge alert-bg">Overdue</div></div>
+              </div>
+              <div class="vaccine-card" style="background:rgba(45,189,126,.08);border-color:rgba(45,189,126,.2)">
+                <div class="row-text"><strong>BCG</strong><small>Completed 15/11/2024 at Ward clinic</small></div>
+                <div style="display:flex;justify-content:flex-end;margin-top:12px"><div class="badge growth-bg">Done</div></div>
+              </div>
+            </section>
+
+            <section class="view" data-view="profile">
+              <div class="topbar">
+                <div class="baby-name">Profile</div>
+                <div class="avatar">BM</div>
+              </div>
+              <div class="section-title">Baby profiles</div>
+              <div class="profile-line card"><div class="baby-avatar" style="width:44px;height:44px">BM</div><div class="row-text"><strong>Bảo Miu</strong><small>18 tháng - Girl</small></div><span style="color:var(--growth);font-weight:900">OK</span></div>
+              <div class="section-title">Doctor report</div>
+              <div class="card" style="padding:16px">
+                <div style="display:flex;justify-content:space-between"><strong>BabyTracker</strong><small>23/05/2026</small></div>
+                <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+                <div class="row-text" style="display:grid;gap:8px">
+                  <small><strong>Growth</strong><span style="float:right">10.2 kg, 82 cm</span></small>
+                  <small><strong>Vaccines</strong><span style="float:right">8 done, 1 late</span></small>
+                  <small><strong>Medicine</strong><span style="float:right">Paracetamol 5 ml</span></small>
+                  <small><strong>Symptoms</strong><span style="float:right">Fever</span></small>
+                </div>
+                <button class="primary-btn" style="width:100%;margin-top:14px">Share Summary</button>
+              </div>
+            </section>
+          </div>
+
+          <nav class="tabbar" aria-label="Preview tabs">
+            <button class="active" data-target="home"><span data-icon="home"></span>Home</button>
+            <button data-target="sleep"><span data-icon="moon"></span>Sleep</button>
+            <button data-target="growth"><span data-icon="chart"></span>Growth</button>
+            <button data-target="vaccine"><span data-icon="syringe"></span>Vaccine</button>
+            <button data-target="profile"><span data-icon="user"></span>Profile</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="icons">
+    <svg data-name="home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+    <svg data-name="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.7 15.3A8.5 8.5 0 0 1 8.7 3.3a8.5 8.5 0 1 0 12 12Z"/></svg>
+    <svg data-name="drop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.2 6 11a6 6 0 0 1-12 0c0-4.8 6-11 6-11Z"/></svg>
+    <svg data-name="temp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0Z"/><path d="M12 9v8"/></svg>
+    <svg data-name="pill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a5 5 0 0 0-7-7l-10 10a5 5 0 0 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+    <svg data-name="chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/></svg>
+    <svg data-name="syringe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 2-2"/><path d="m3 21 7-7"/><path d="m9 15-2-2 8-8 4 4-8 8-2-2Z"/><path d="m6 12 6 6"/></svg>
+    <svg data-name="user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+  </template>
+
+  <script>
+    const icons = new Map([...document.querySelectorAll("#icons svg")].map((svg) => [svg.dataset.name, svg.outerHTML]));
+    document.querySelectorAll("[data-icon]").forEach((node) => {
+      node.innerHTML = icons.get(node.dataset.icon) || "";
+    });
+
+    const buttons = document.querySelectorAll(".tabbar button");
+    const views = document.querySelectorAll(".view");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((item) => item.classList.remove("active"));
+        views.forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        document.querySelector(`[data-view="${button.dataset.target}"]`).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
