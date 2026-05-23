@@ -1,0 +1,92 @@
+*** Begin Patch***
+*** Update File: BabyHealthTracker/Views/ProfileView.swift
+@@
++import SwiftUI
++import Foundation
++
++enum AppLanguage: String, CaseIterable {
++    case english = \"en\"
++    case vietnamese = \"vi\"
++    
++    var title: String {
++        switch self {
++        case .english: return \"English\"
++        case .vietnamese: return \"Tiếng Việt\"
++        }
++    }
++}
++
++struct LanguageManager {
++    static let shared = LanguageManager()
++    private let key = \"AppleLanguages\"
++    
++    var currentLanguage: AppLanguage {
++        get {
++            let lang = UserDefaults.standard.string(forKey: key) ?? \"en\"
++            return AppLanguage(rawValue: lang) ?? .english
++        }
++        set {
++            UserDefaults.standard.set(newValue.rawValue, forKey: key)
++        }
++    }
++}
++
+ struct ProfileView: View {
+@@
+ private struct SettingsSection: View {
+     @EnvironmentObject private var store: BabyHealthStore
+     @State private var dailySummary = Date()
+     @State private var diaperReminderHours = 4.0
+     @State private var vaccineReminderDays = 7
++    @State private var selectedLanguage: AppLanguage = LanguageManager.shared.currentLanguage
++    @State private var showRestartAlert = false
+
+     var body: some View {
+         VStack(alignment: .leading, spacing: 10) {
+-            SectionTitle(title: \"Settings\")
++            SectionTitle(title: LocalizedStringKey(\"settings.title\"))
+
+             VStack(spacing: 12) {
+-                DatePicker(\"Daily summary\", selection: , displayedComponents: .hourAndMinute)
+-                Stepper(\"Diaper reminder: \(Int(diaperReminderHours))h\", value: , in: 2...8, step: 1)
+-                Stepper(\"Vaccine reminder: \(vaccineReminderDays)d\", value: , in: 1...14, step: 1)
++                DatePicker(LocalizedStringKey(\"settings.daily_summary\"), selection: , displayedComponents: .hourAndMinute)
++                Stepper(String(format: NSLocalizedString(\"settings.diaper_reminder\", comment: \"\"), Int(diaperReminderHours)), value: , in: 2...8, step: 1)
++                Stepper(String(format: NSLocalizedString(\"settings.vaccine_reminder\", comment: \"\"), vaccineReminderDays), value: , in: 1...14, step: 1)
++                
++                HStack {
++                    Text(LocalizedStringKey(\"settings.language\"))
++                        .font(.rounded(14, weight: .semibold))
++                    Spacer()
++                    Picker(\"\", selection: ) {
++                        ForEach(AppLanguage.allCases, id: \.self) { lang in
++                            Text(lang.title).tag(lang)
++                        }
++                    }
++                    .pickerStyle(.menu)
++                    .onChange(of: selectedLanguage) { _, newValue in
++                        LanguageManager.shared.currentLanguage = newValue
++                        showRestartAlert = true
++                    }
++                }
++                .alert(LocalizedStringKey(\"settings.title\"), isPresented: ) {
++                    Button(\"OK\", role: .cancel) {}
++                } message: {
++                    Text(LocalizedStringKey(\"settings.restart_required\"))
++                }
+
+                 Button(role: .destructive) {
+                     store.resetDemoData()
+                 } label: {
+-                    Label(\"Reset Demo Data\", systemImage: \"arrow.counterclockwise\")
++                    Label(LocalizedStringKey(\"settings.reset_demo_data\"), systemImage: \"arrow.counterclockwise\")
+                         .frame(maxWidth: .infinity)
+                 }
+                 .buttonStyle(.bordered)
+             }
+             .padding(16)
+             .appCard()
+         }
+     }
+ }
+*** End Patch

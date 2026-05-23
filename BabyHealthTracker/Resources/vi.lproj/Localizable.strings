@@ -12,3 +12,12 @@
 "vaccine.status.soon" = "Sắp đến";
 "vaccine.status.overdue" = "Trễ hẹn";
 "warning.double.dose" = "Cảnh báo liều thuốc";
+"settings.title" = "Cài đặt";
+"settings.language" = "Ngôn ngữ";
+"settings.language english" = "Tiếng Anh";
+"settings.language vietnamese" = "Tiếng Việt";
+"settings.restart_required" = "Thay đổi ngôn ngữ cần khởi động lại ứng dụng để có hiệu lực";
+"settings.daily_summary" = "Tóm tắt hàng ngày";
+"settings.diaper_reminder" = "Nhắc nhở tã: %1$@giờ";
+"settings.vaccine_reminder" = "Nhắc nhở vaccine: %1$@ngày";
+"settings.reset_demo_data" = "Đặt lại dữ liệu demo";

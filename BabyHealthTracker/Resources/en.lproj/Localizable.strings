@@ -12,3 +12,12 @@
 "vaccine.status.soon" = "Soon";
 "vaccine.status.overdue" = "Overdue";
 "warning.double.dose" = "Double-dose warning";
+"settings.title" = "Settings";
+"settings.language" = "Language";
+"settings.language english" = "English";
+"settings.language vietnamese" = "Tiếng Việt";
+"settings.restart_required" = "Language change requires app restart to take effect.";
+"settings.daily_summary" = "Daily summary";
+"settings.diaper_reminder" = "Diaper reminder: %1$@h";
+"settings.vaccine_reminder" = "Vaccine reminder: %1$@d";
+"settings.reset_demo_data" = "Reset Demo Data";
